@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+         <meta charset="UTF-8">
+        <title>POINTS </title>
+
+        <style>
+            table, th, td {
+            border: 1px solid black;
+            }
+        </style>
+
+
+    </head>
+
+    <body >
+         <div align="center" style="background-image: url({{ url_for('static', filename='wood3.jpg') }})" )>
+
+                <div>
+                <h3>Insert: insert a point and return a unique KEY for the inserted object</h3>
+                <p>Insert X coordinate and then Y coordinate</p>
+                    <form action="add" method="POST">
+                         <input type="number" value="X" name ="XpointInsert" required >
+                         <input type="number" value="Y" name ="YpointInsert" required  >
+                         <input type="submit" value='Enter Point'>
+                    </form>
+
+                    {% if submissionSuccessfulAdd %}
+                          <p>You insert a new point! the key value is : - {{newID}} - </p>
+                    {% endif %}
+                    {% if errorAdd %}
+                          <p>This Point already exist :), try again</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <h3>Remove: remove a point for a given KEY</h3>
+                    <p>Insert KEY of point to be deleted</p>
+                        <form action="delete" method="POST">
+                             <input type="number" name="keyToDeletePoint" required>
+                             <input type="submit" value="Delete KEY" >
+                        </form>
+
+                        {% if submissionSuccessfulDelete %}
+                              <p>You Delete that point!</p>
+                        {% endif %}
+                        {% if errorDelete %}
+                              <p>Not valid Key :), try again</p>
+                        {% endif %}
+                </div>
+                <div>
+                    <h3>Search: search all points contained in a rectangle</h3>
+                    <p>Insert X,Y of Most-Up-Left Point, Width and Height</p>
+                        <form action="search" method="POST" >
+                             <input type="number" name="XlowerUP" required>
+                             <input type="number" name="YlowerUP" required>
+                             <input type="number" name="rectangleWidth" required>
+                             <input type="number" name="rectangleHeight" required>
+                             <input type="submit" value="Get Points inside Rectangle" required>
+                        </form>
+                        {% if submissionSuccessfulSearch %}
+                            <p>for the rectangle with the point ({{Xstart}},{{Ystart}}) with width {{width}} and height {{height}} </p>
+                            <p>the list of keys are:</p>
+                            {% for pointContained in listOfPointsInRectangle %}
+                                 <th> <input type="hidden" > {{pointContained.id}} </th>
+                            {% endfor %}
+                        {% endif %}
+                        {% if EmptySearch %}
+                              <p>no points inside this particular rectangle, try different values</p>
+                        {% endif %}
+                        {% if badInputWidthOrHeight %}
+                              <p> width or height values cant be negative, try different values</p>
+                        {% endif %}
+                </div>
+                <div>
+                    <h3>Get: get the point for a given KEY</h3>
+                    <p>Insert KEY</p>
+                        <form action="get" method="POST" >
+                             <input type="number" name="KeyForPoint" required>
+                             <input type="submit" value="KeyToGetPoint" >
+                        </form>
+
+                        {% if submissionSuccessfulGet %}
+                              <p>Here is your point - {{pointCoord}} - </p>
+                        {% endif %}
+                        {% if errorGet %}
+                              <p>Error, there's no point for that specific given key, try again</p>
+                        {% endif %}
+                </div>
+                <div class="row"  align="center" >
+                    <h2 style="font-size : 20pt">Database</h2>
+                    <table >
+                         <tr>
+                            <th>Points</th>
+                            <th>Key</th>
+                         </tr>
+                        {% for singlePoint in allPoints %}
+                          <tr>
+                                 <td>  <input type="hidden" > {{singlePoint.text}}</td>
+                                 <td>  <input type="hidden" > {{singlePoint.id}}</td>
+                          </tr>
+
+                        {% endfor %}
+                    </table>
+                </div>
+
+         </div>
+
+    </body>
+</html>
