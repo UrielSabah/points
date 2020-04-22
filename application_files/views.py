@@ -22,7 +22,7 @@ def add():
     print(request.form)
     newTextForPoint = "({},{})".format(request.form['XpointInsert'], request.form['YpointInsert'])
     checkIfPointExist = (bool(Points.query.filter_by(text=newTextForPoint).first()))
-    if (checkIfPointExist == False):
+    if not checkIfPointExist:
         # create new point
         newPointModel = Points(text=newTextForPoint, xCoord=request.form['XpointInsert'], yCoord=request.form['YpointInsert'])
         # adding new point to the data base
